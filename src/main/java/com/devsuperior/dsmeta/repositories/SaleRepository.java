@@ -1,5 +1,7 @@
 package com.devsuperior.dsmeta.repositories;
 
+import com.devsuperior.dsmeta.dto.SaleSallerMinDTO;
+import com.devsuperior.dsmeta.projections.SalesSallerMinProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,13 +31,28 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 
 
 
- @Query(nativeQuery = true,value="select a.id,a.visited,a.deals,a.amount,a.date,a.seller_id from tb_sales a" +
+ @Query(nativeQuery = true,value="select a.id,a.visited,a.deals,a.amount,a.date,a.seller_id,b.name" +
+            " from tb_sales a" +
             " INNER JOIN tb_seller b on a.seller_id = b.id " +
             " WHERE a.date >= CAST(:datainicio AS DATE)" +
             " AND  a.date <= CAST(:datafim AS DATE)" +
             " AND UPPER(b.name) like UPPER(CONCAT('%',:name,'%'))")
- List<Sale> searchByNameDatesString(String name, String datainicio, String datafim ,Pageable pageable);
+ List<Sale> searchByNameDatesStringOld(String name, String datainicio, String datafim ,Pageable pageable);
 
+@Query(nativeQuery = true,value="select a.id,a.visited,a.deals,a.amount,a.date,a.seller_id,b.name" +
+            " from tb_sales a" +
+            " INNER JOIN tb_seller b on a.seller_id = b.id " +
+            " WHERE a.date >= CAST(:datainicio AS DATE)" +
+            " AND  a.date <= CAST(:datafim AS DATE)" +
+            " AND UPPER(b.name) like UPPER(CONCAT('%',:name,'%'))")
+ List<SalesSallerMinProjection> searchByNameDatesString(String name, String datainicio, String datafim , Pageable pageable);
+
+
+    select sum(a.amount)as volume_vendas, b.name from tb_sales a
+    inner join tb_seller b
+    on a.seller_id = b.id
+    where a.date Between cast('2022-01-01' as date) and cast('2022-12-01' as date)
+    group by (a.seller_id)
 
 
 }
