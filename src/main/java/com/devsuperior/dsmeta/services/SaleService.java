@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.devsuperior.dsmeta.dto.SaleSallerMinDTO;
+import com.devsuperior.dsmeta.dto.SaleSallerMinPeriodoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,6 +67,23 @@ public class SaleService {
 
 		//return result;
 		return null;
+
+
+	}
+
+	public List<SaleSallerMinPeriodoDTO> searchBySumPeriod(String minDate, String maxDate, Pageable pageable) {
+
+		//tratamento das datas conforme requisitos do sistema
+		maxDate =  maxDate.trim().equals("")? LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault()).toString():maxDate;
+		LocalDate ldt = LocalDate.parse(maxDate);
+		minDate =  minDate.trim().equals("")?ldt.minusYears(1).toString():minDate;
+
+
+		List<SaleSallerMinPeriodoDTO> result = repository.searchBySumDates(minDate,maxDate,pageable).stream().map(SaleSallerMinPeriodoDTO::new).collect(Collectors.toList());
+
+		return result;
+
+
 
 
 	}
