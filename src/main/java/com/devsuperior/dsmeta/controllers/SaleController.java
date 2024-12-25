@@ -29,15 +29,9 @@ public class SaleController {
 		return ResponseEntity.ok(dto);
 	}
 
-	@GetMapping(value = "/reportss")
-	public ResponseEntity<Page<SaleMinDTO>> getReports(@RequestParam(name="name",defaultValue = "")String name,
-													  @RequestParam("datainicio")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date datainicio, Pageable pageable){
-
-		return ResponseEntity.ok(service.searchByNameDates(name,datainicio,pageable));
-	}
 	@GetMapping(value = "/summary")
-	public ResponseEntity<List<SaleSallerMinPeriodoDTO>> getSummary(@RequestParam("minDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String minDate,
-																	@RequestParam("maxDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String maxDate,
+	public ResponseEntity<List<SaleSallerMinPeriodoDTO>> getSummary(@RequestParam(name="minDate",defaultValue = "")String minDate,
+																	@RequestParam(name="maxDate",defaultValue = "")String maxDate,
 																	Pageable pageable){
 
 		return ResponseEntity.ok(service.searchBySumPeriod(minDate,maxDate,pageable));
@@ -53,9 +47,5 @@ public class SaleController {
 		return ResponseEntity.ok(service.searchByNameDatesString(name,minDate,maxDate, pageable));
 	}
 
-	@GetMapping(value = "/summary")
-	public ResponseEntity<?> getSummary() {
-		// TODO
-		return null;
-	}
+
 }

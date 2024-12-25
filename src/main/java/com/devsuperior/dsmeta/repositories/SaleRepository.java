@@ -48,12 +48,12 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             " AND UPPER(b.name) like UPPER(CONCAT('%',:name,'%'))")
  List<SalesSallerMinProjection> searchByNameDatesString(String name, String datainicio, String datafim , Pageable pageable);
 
-    @Query(nativeQuery = true,value="select sum(a.amount)as volume_vendas, b.name from tb_sales a" +
+@Query(nativeQuery = true,value="select sum(a.amount) as amount, b.name from tb_sales a" +
             " inner join tb_seller b" +
             " on a.seller_id = b.id" +
-            " where a.date Between cast(:datainicio as date) and cast(:datafim' as date)" +
+            " where a.date Between cast(:datainicio as date) and cast(:datafim as date)" +
             " group by (a.seller_id)")
-    List<SalesSallerMinPeriodoProjection> searchBySumDates(String datainicio, String datafim , Pageable pageable);
+List<SalesSallerMinPeriodoProjection> searchBySumDates(String datainicio, String datafim , Pageable pageable);
 
 
 
